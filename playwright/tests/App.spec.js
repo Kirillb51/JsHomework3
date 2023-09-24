@@ -8,10 +8,6 @@ const {
 } = require("../user");
 
 test("Successful authorization", async () => {
-  const browser = await chromium.launch({
-    headless: false,
-    slowMo: 500,
-  });
   const page = await browser.newPage("https://netology.ru/?modal=sign_in");
   await page.goto("https://netology.ru/?modal=sign_in");
   await page.fill('[placeholder="Email"]', email);
@@ -20,14 +16,9 @@ test("Successful authorization", async () => {
   //await expect(page).toHaveURL("https://netology.ru/profile");
   await expect(page.locator("h2")).toContainText(["Мои курсы и профессии"]);
   await page.screenshot({ path: "screenshotSuccessful.png", fullPage: true });
-  browser.close();
 }, 60000);
 
 test("Failed authorization", async () => {
-  const browser = await chromium.launch({
-    headless: false,
-    slowMo: 500,
-  });
   const page = await browser.newPage("https://netology.ru/?modal=sign_in");
   await page.goto("https://netology.ru/?modal=sign_in");
   await page.fill('[placeholder="Email"]', incorrectEmail);
@@ -36,5 +27,4 @@ test("Failed authorization", async () => {
   const error = await page.locator('[data-testid="login-error-hint"]');
   await expect(error).toHaveText("Вы ввели неправильно логин или пароль");
   await page.screenshot({ path: "screenshotFailed.png", fullPage: true });
-  browser.close();
 }, 60000);
